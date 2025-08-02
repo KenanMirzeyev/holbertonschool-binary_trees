@@ -8,11 +8,10 @@
  */
 int is_ancestor(const binary_tree_t *node, const binary_tree_t *anc)
 {
-	if (!node || !anc)
+	if (!anc)
 		return (0);
-	do
+	while (node && node != anc)
 		node = node->parent;
-	while (node && node != anc);
 	return (node != NULL);
 }
 /**
@@ -25,13 +24,10 @@ int is_ancestor(const binary_tree_t *node, const binary_tree_t *anc)
 binary_tree_t *binary_trees_ancestor(const binary_tree_t *first,
 				const binary_tree_t *second)
 {
-	binary_tree_t *node;
-
-	if (!first || !second)
+	if (!second)
 		return (NULL);
-	node = (binary_tree_t *) first;
-	while (node && !is_ancestor(second, node))
-		node = node->parent;
-	return (node);
+	while (first && !is_ancestor(second, first))
+		first = first->parent;
+	return ((binary_tree_t *) first);
 }
 
