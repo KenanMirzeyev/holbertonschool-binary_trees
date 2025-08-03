@@ -9,11 +9,11 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 {
 	if (tree)
 	{
-		int h = 1;
+		int h = 1, found_null = 0;
 
 		while (1)
 		{
-			int x = 0, i, j, found_null = 0;
+			int x = 0, i, j;
 
 			for (i = 0; i < (1 << h); i++)
 			{
