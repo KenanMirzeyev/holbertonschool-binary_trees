@@ -1,3 +1,4 @@
+#include "binary_trees.h"
 /**
  * binary_tree_rotate_right - right rotate
  * @tree: root node
