@@ -35,13 +35,13 @@ int max(const binary_tree_t *tree)
 
 	if (tree->left)
 	{
-		ml = min(tree->left);
+		ml = max(tree->left);
 		if (ml > m)
 			m = ml;
 	}
 	if (tree->right)
 	{
-		mr = min(tree->right);
+		mr = max(tree->right);
 		if (mr > m)
 			m = mr;
 	}
