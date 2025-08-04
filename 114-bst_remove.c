@@ -104,6 +104,7 @@ bst_t *bst_remove(bst_t *root, int value)
 
 		if (nxt)
 		{
+			remove_from_parent(nxt);
 			if (!node->left && nxt->left)
 			{
 				node->left = nxt->left;
@@ -115,7 +116,6 @@ bst_t *bst_remove(bst_t *root, int value)
 				node->right->parent = node->right;
 			}
 			node->n = nxt->n;
-			remove_from_parent(nxt);
 			free(nxt);
 		}
 		else
