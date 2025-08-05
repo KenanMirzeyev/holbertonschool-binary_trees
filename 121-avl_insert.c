@@ -79,21 +79,30 @@ avl_t *avl_insert(avl_t **tree, int value)
 {
 	avl_t *node = bst_insert(tree, value);
 
-	while (node)
+	if (node && node->parent && node->parent->parent)
 	{
-		int bf = binary_tree_balance(node);
+		avl_t *rot = node->parent->parent, *new_root;
+		avl_t *par = rot->parent;
+		int bf = binary_tree_balance(rot);
 
-		while (bf < -1)
+		if (bf * bf <= 1)
+			return (node);
+		if (rot->left && rot->left->left == node)
+			new_root = binary_tree_rotate_right(rot);
+		if (rot->right && rot->right->right == node)
+			new_root = binary_tree_rotate_left(rot);
+		if (rot->right && rot->right->left == node)
 		{
-			binary_tree_rotate_left(node);
-			bf = binary_tree_balance(node);
+			binary_tree_rotate_right(rot->right);
+			new_root = binary_tree_rotate_left(rot);
 		}
-		while (bf > 1)
+		if (rot->left && rot->left->right == node)
 		{
-			binary_tree_rotate_right(node);
-			bf = binary_tree_balance(node);
+			binary_tree_rotate_left(rot->left)->parent = rot;
+			new_root = binary_tree_rotate_right(rot);
 		}
-		node = node->parent;
+		if (!par)
+			*tree = new_root;
 	}
 	return (node);
 }
