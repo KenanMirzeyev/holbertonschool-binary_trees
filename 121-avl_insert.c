@@ -69,6 +69,45 @@ bst_t *bst_insert(bst_t **tree, int value)
 	return (NULL);
 }
 /**
+ * do_rotate - do necessary rotation on node to balance
+ * @node: newly inserted node
+ *
+ * Return: new root node
+ * NULL if not changed
+ */
+avl_t *do_rotate(avl_t *node)
+{
+	avl_t *root = NULL;
+
+	while (node && node->parent)
+	{
+		avl_t *rot = node->parent->parent, *new_root = NULL;
+		int bf = binary_tree_balance(rot);
+
+		if (bf * bf > 1)
+		{
+			if (rot->left && rot->left->left == node)
+				new_root = binary_tree_rotate_right(rot);
+			if (rot->right && rot->right->right == node)
+				new_root = binary_tree_rotate_left(rot);
+			if (rot->left && rot->left->right == node)
+			{
+				binary_tree_rotate_left(rot->left);
+				new_root = binary_tree_rotate_right(rot);
+			}
+			if (rot->right && rot->right->left == node)
+			{
+				binary_tree_rotate_right(rot->right);
+				new_root = binary_tree_rotate_left(rot);
+			}
+			if (!new_root->parent)
+				root = new_root;
+		}
+		node = node->parent;
+	}
+	return (root);
+}
+/**
  * avl_insert - insert into avl tree
  * @tree: double pointer to root node
  * @value: value to be inserted
@@ -78,31 +117,9 @@ bst_t *bst_insert(bst_t **tree, int value)
 avl_t *avl_insert(avl_t **tree, int value)
 {
 	avl_t *node = bst_insert(tree, value);
+	avl_t *new_root = do_rotate(node);
 
-	if (node && node->parent && node->parent->parent)
-	{
-		avl_t *rot = node->parent->parent, *new_root;
-		avl_t *par = rot->parent;
-		int bf = binary_tree_balance(rot);
-
-		if (bf * bf <= 1)
-			return (node);
-		if (rot->left && rot->left->left == node)
-			new_root = binary_tree_rotate_right(rot);
-		if (rot->right && rot->right->right == node)
-			new_root = binary_tree_rotate_left(rot);
-		if (rot->right && rot->right->left == node)
-		{
-			binary_tree_rotate_right(rot->right);
-			new_root = binary_tree_rotate_left(rot);
-		}
-		if (rot->left && rot->left->right == node)
-		{
-			binary_tree_rotate_left(rot->left)->parent = rot;
-			new_root = binary_tree_rotate_right(rot);
-		}
-		if (!par)
-			*tree = new_root;
-	}
+	if (new_root)
+		*tree = new_root;
 	return (node);
 }
