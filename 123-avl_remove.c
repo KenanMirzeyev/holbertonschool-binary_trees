@@ -93,7 +93,7 @@ bst_t *bst_remove(bst_t *root, int value)
 			if (!node->right && nxt->right)
 			{
 				node->right = nxt->right;
-				node->right->parent = node->right;
+				node->right->parent = node;
 			}
 			node->n = nxt->n;
 			free(nxt);
@@ -116,21 +116,22 @@ bst_t *bst_remove(bst_t *root, int value)
  */
 avl_t *avl_remove(avl_t *root, int value)
 {
-	avl_t *node = bst_search(root, value);
+	avl_t *node = bst_search(root, value), *parent;
 
 	if (!node)
 		return (root);
-	node = node->parent;
+	parent = node->parent;
 	root = bst_remove(root, value);
+	if (!(node == parent->left || node == parent->right))
+		node = parent;
 	while (node)
 	{
 		avl_t *parent = node->parent;
-		int bf = binary_tree_balance(node), _bf;
+		int bf = binary_tree_balance(node);
 
 		if (bf < -1)
 		{
-			_bf = binary_tree_balance(node->right);
-			if (_bf <= 0)
+			if (binary_tree_balance(node->left) <= 0)
 				root = binary_tree_rotate_left(node);
 			else
 			{
@@ -140,8 +141,7 @@ avl_t *avl_remove(avl_t *root, int value)
 		}
 		else if (bf > 1)
 		{
-			_bf = binary_tree_balance(node->left);
-			if (_bf >= 0)
+			if (binary_tree_balance(node->left) >= 0)
 				root = binary_tree_rotate_right(node);
 			else
 			{

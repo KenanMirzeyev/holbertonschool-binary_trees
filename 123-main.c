@@ -9,36 +9,28 @@
  */
 int main(void)
 {
-    avl_t *tree;
-    int array[] = {
-        79, 47, 68, 87, 84, 91, 21, 32, 34, 2,
-        20, 22, 98, 1, 62, 95
-    };
-    size_t n = sizeof(array) / sizeof(array[0]);
+    avl_t *tree = binary_tree_node(NULL, 56);
 
-    tree = array_to_avl(array, n);
-    if (!tree)
-        return (1);
+    tree->left = binary_tree_node(tree, 43);
+    tree->left->left = binary_tree_node(tree->left, 2);
+    tree->right = binary_tree_node(tree, 98);
+    tree->right->left = binary_tree_node(tree->right, 78);
+    tree->right->left->left = binary_tree_node(tree->right->left, 76);
+    tree->right->right = binary_tree_node(tree->right, 123);
+    tree->right->right->left = binary_tree_node(tree->right->right, 110);
+    tree->right->right->right = binary_tree_node(tree->right->right, 234);
     binary_tree_print(tree);
-
-    tree = avl_remove(tree, 47);
-    printf("Removed 47...\n");
+    printf("remove: %d\n", 98);
+    avl_remove(tree, 98);
+    printf("%d\n", bst_search(tree, 234)->parent->n);
     binary_tree_print(tree);
-
-    tree = avl_remove(tree, 79);
-    printf("Removed 79...\n");
+    printf("remove: %d\n", 110);
+    avl_remove(tree, 110);
+    printf("%d\n", bst_search(tree, 234)->parent->n);
     binary_tree_print(tree);
-
-    tree = avl_remove(tree, 32);
-    printf("Removed 32...\n");
-    binary_tree_print(tree);
-
-    tree = avl_remove(tree, 34);
-    printf("Removed 34...\n");
-    binary_tree_print(tree);
-
-    tree = avl_remove(tree, 22);
-    printf("Removed 22...\n");
+    printf("remove: %d\n", 123);
+    avl_remove(tree, 123);
+    printf("%d\n", bst_search(tree, 234)->parent->n);
     binary_tree_print(tree);
     binary_tree_delete(tree);
     return (0);
