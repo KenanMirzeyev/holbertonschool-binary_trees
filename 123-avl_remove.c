@@ -126,29 +126,31 @@ avl_t *avl_remove(avl_t *root, int value)
 		node = parent;
 	while (node)
 	{
-		avl_t *parent = node->parent;
+		avl_t *parent = node->parent, *nr = root;
 		int bf = binary_tree_balance(node);
 
 		if (bf < -1)
 		{
 			if (binary_tree_balance(node->left) <= 0)
-				root = binary_tree_rotate_left(node);
+				nr = binary_tree_rotate_left(node);
 			else
 			{
 				binary_tree_rotate_right(node->right);
-				root = binary_tree_rotate_left(node);
+				nr = binary_tree_rotate_left(node);
 			}
 		}
 		else if (bf > 1)
 		{
 			if (binary_tree_balance(node->left) >= 0)
-				root = binary_tree_rotate_right(node);
+				nr = binary_tree_rotate_right(node);
 			else
 			{
 				binary_tree_rotate_left(node->left);
-				root = binary_tree_rotate_right(node);
+				nr = binary_tree_rotate_right(node);
 			}
 		}
+		if (!parent)
+			root = nr;
 		node = parent;
 	}
 	return (root);

@@ -21,17 +21,11 @@ int main(void)
     tree->right->right->right = binary_tree_node(tree->right->right, 234);
     binary_tree_print(tree);
     printf("remove: %d\n", 98);
-    avl_remove(tree, 98);
-    printf("%d\n", bst_search(tree, 234)->parent->n);
-    binary_tree_print(tree);
+    binary_tree_print(avl_remove(tree, 98));
     printf("remove: %d\n", 110);
-    avl_remove(tree, 110);
-    printf("%d\n", bst_search(tree, 234)->parent->n);
-    binary_tree_print(tree);
+    binary_tree_print(avl_remove(tree, 110));
     printf("remove: %d\n", 123);
-    avl_remove(tree, 123);
-    printf("%d\n", bst_search(tree, 234)->parent->n);
-    binary_tree_print(tree);
+    binary_tree_print(avl_remove(tree, 123));
     binary_tree_delete(tree);
     return (0);
 }
